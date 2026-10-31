@@ -1,0 +1,279 @@
+{
+  "parishInfo": {
+    "name": "Paróquia da Imaculada",
+    "subtitle": "Comunidade de Fé, Devoção Mariana e Acolhida no Bairro São Bernardo",
+    "address": "Praça Professor Paulo José Otaviano, 2 (98) - São Bernardo",
+    "cityState": "Campinas - SP",
+    "cep": "13030-629",
+    "forania": "Forania São José — Arquidiocese de Campinas",
+    "phone": "(19) 3272-1251",
+    "whatsapp": "(19) 99591-6572",
+    "whatsappNumber": "5519995916572",
+    "instagram": "https://www.instagram.com/paroquiadaimaculadacampinas/",
+    "youtube": "https://www.youtube.com/@Par%C3%B3quiadaImaculada",
+    "facebook": "https://www.facebook.com/ParoquiadaImaculada/",
+    "pixKey": "secretaria@paroquiadaimaculada.org.br (Chave ilustrativa — atualizar no Painel da Secretaria)",
+    "pixHolder": "Paróquia Nossa Senhora da Imaculada Conceição — Campinas",
+    "pixBank": "Arquidiocese de Campinas / Paróquia da Imaculada",
+    "churchOpenHours": {
+      "weekdays": "Terça a Sexta – 08h às 12:15h – 13:15h às 17h",
+      "saturday": "Sábado – 08h às 12h",
+      "sunday": "Domingo: Aberta nos horários das Santas Missas (08h30, 10h30 e 18h30)",
+      "note": "O horário de atendimento da Secretaria Paroquial acompanha o horário da igreja aberta (Terça a Sábado). Confissões mediante agendamento na secretaria."
+    }
+  },
+  "massSchedules": [
+    {
+      "id": "domingo",
+      "day": "Domingo",
+      "badge": "Dia do Senhor",
+      "times": ["08h30", "10h30", "18h30"],
+      "description": "Santas Missas Dominicais com toda a comunidade paroquial na Igreja Matriz."
+    },
+    {
+      "id": "sabado",
+      "day": "Sábado",
+      "badge": "Fim de Semana",
+      "times": ["12h15", "17h30"],
+      "description": "Missa votiva ao meio-dia e Missa Vespertina (preceito dominical) às 17h30."
+    },
+    {
+      "id": "quarta",
+      "day": "Quarta-feira",
+      "badge": "Semanal Fixa",
+      "times": ["12h15"],
+      "description": "Santa Missa no horário de almoço, acolhendo trabalhadores, moradores e devotos."
+    },
+    {
+      "id": "primeira-sexta",
+      "day": "1ª Sexta-feira do Mês",
+      "badge": "Devoção Especial",
+      "times": ["12h15", "15h00"],
+      "description": "Santas Missas em honra ao Sagrado Coração de Jesus na primeira sexta-feira de cada mês."
+    }
+  ],
+  "events": [
+    {
+      "id": "evt-1",
+      "title": "Missa da 1ª Sexta-feira — Sagrado Coração de Jesus",
+      "date": "2026-11-06",
+      "time": "12h15 e 15h00",
+      "category": "Liturgia",
+      "location": "Igreja Matriz — Praça Prof. Paulo José Otaviano",
+      "description": "Celebração Eucarística e oração reparadora ao Sagrado Coração de Jesus nos dois horários."
+    },
+    {
+      "id": "evt-2",
+      "title": "Encontro do Terço dos Homens",
+      "date": "2026-10-24",
+      "time": "19h30",
+      "category": "Movimento",
+      "location": "Igreja Matriz",
+      "description": "Oração comunitária do Santo Terço com os homens e famílias da nossa paróquia."
+    },
+    {
+      "id": "evt-3",
+      "title": "Novena e Festa da Imaculada Conceição (Padroeira)",
+      "date": "2026-12-08",
+      "time": "08h30, 12h15 e 19h00",
+      "category": "Festa da Padroeira",
+      "location": "Igreja Matriz — São Bernardo",
+      "description": "Dia solene de Nossa Senhora da Imaculada Conceição, padroeira da nossa paróquia e da cidade de Campinas."
+    },
+    {
+      "id": "evt-4",
+      "title": "Plantão da Pastoral do Dízimo e Acolhida",
+      "date": "2026-10-25",
+      "time": "08h30, 10h30 e 18h30",
+      "category": "Pastoral",
+      "location": "Átrio da Igreja Matriz",
+      "description": "Equipe da Pastoral do Dízimo disponível após as missas de domingo para novos cadastros e partilha."
+    }
+  ],
+  "pastorals": [
+    {
+      "id": "caridade",
+      "name": "Pastoral da Caridade",
+      "type": "Pastoral Social",
+      "schedule": "Atendimento e triagem mensal com famílias assistidas",
+      "coordinator": "Equipe Paroquial da Caridade",
+      "description": "Serviço cristão de amor ao próximo, arrecadação e partilha de alimentos, roupas e apoio fraterno às famílias em situação de vulnerabilidade."
+    },
+    {
+      "id": "dizimo",
+      "name": "Pastoral do Dízimo",
+      "type": "Pastoral",
+      "schedule": "Plantões nas missas de fim de semana",
+      "coordinator": "Equipe do Dízimo",
+      "description": "Conscientização, acolhida aos dizimistas e zelo pela manutenção da casa de Deus, da evangelização e das obras sociais da paróquia."
+    },
+    {
+      "id": "catequese",
+      "name": "Catequese (Primeira Eucaristia)",
+      "type": "Iniciação à Vida Cristã",
+      "schedule": "Encontros semanais aos finais de semana",
+      "coordinator": "Coordenação Paroquial de Catequese",
+      "description": "Iniciação de crianças, adolescentes e adultos no caminho da fé, na Palavra de Deus e na preparação para a Primeira Eucaristia."
+    },
+    {
+      "id": "crisma",
+      "name": "Pastoral da Crisma",
+      "type": "Iniciação à Vida Cristã",
+      "schedule": "Encontros semanais para jovens e adultos",
+      "coordinator": "Equipe da Crisma",
+      "description": "Preparação para o Sacramento da Confirmação, fortalecendo os dons do Espírito Santo e o compromisso missionário na Igreja."
+    },
+    {
+      "id": "liturgia",
+      "name": "Pastoral da Liturgia",
+      "type": "Liturgia",
+      "schedule": "Escalas nas missas de quarta, sexta, sábado e domingo",
+      "coordinator": "Equipe de Liturgia",
+      "description": "Preparação das celebrações, leitores, salmistas, comentários e cuidado zeloso com os símbolos e tempos litúrgicos."
+    },
+    {
+      "id": "canto",
+      "name": "Pastoral do Canto e Música Litúrgica",
+      "type": "Liturgia",
+      "schedule": "Ensaios semanais e ministérios nas missas",
+      "coordinator": "Ministérios de Música",
+      "description": "Animação litúrgica através do canto sagrado, ajudando a assembleia a rezar com beleza e fidelidade ao Evangelho."
+    },
+    {
+      "id": "ministros",
+      "name": "Ministros Extraordinários da Sagrada Comunhão",
+      "type": "Liturgia e Enfermos",
+      "schedule": "Celebrações e visitas semanais aos enfermos",
+      "coordinator": "Coordenação dos Ministros (MESC)",
+      "description": "Serviço ao altar na distribuição da Sagrada Eucaristia e visita amorosa levando a Comunhão aos idosos e enfermos em seus lares."
+    },
+    {
+      "id": "coroinhas",
+      "name": "Coroinhas e Acólitos",
+      "type": "Liturgia",
+      "schedule": "Formação mensal e serviço nas Santas Missas",
+      "coordinator": "Coordenação de Coroinhas",
+      "description": "Crianças e adolescentes que servem ao altar com alegria, reverência e amizade com Jesus Eucarístico."
+    },
+    {
+      "id": "saude",
+      "name": "Pastoral da Saúde",
+      "type": "Pastoral Social",
+      "schedule": "Visitas domiciliares e ações de cuidado comunitário",
+      "coordinator": "Equipe da Pastoral da Saúde",
+      "description": "Presença samaritana junto aos doentes, idosos e seus cuidadores, levando consolo espiritual, escuta e orientação."
+    },
+    {
+      "id": "familiar",
+      "name": "Pastoral Familiar",
+      "type": "Família e Vida",
+      "schedule": "Encontros de formação e preparação para o Matrimônio",
+      "coordinator": "Casais Coordenadores",
+      "description": "Acolhida aos noivos, acompanhamento de casais e fortalecimento das famílias como verdadeiras igrejas domésticas."
+    },
+    {
+      "id": "juventude",
+      "name": "Pastoral da Juventude",
+      "type": "Juventude",
+      "schedule": "Encontros de oração, formação e missão aos finais de semana",
+      "coordinator": "Jovens Coordenadores",
+      "description": "Espaço de fraternidade, oração, música e protagonismo juvenil na comunidade da Imaculada."
+    },
+    {
+      "id": "mae-rainha",
+      "name": "Movimento da Capelinha da Mãe Rainha",
+      "type": "Movimento Mariano",
+      "schedule": "Peregrinação mensal nos lares e missa da Aliança",
+      "coordinator": "Missionárias da Mãe Rainha",
+      "description": "Campanha da Mãe Peregrina de Schoenstatt, levando a capelinha de Nossa Senhora para visitar e abençoar as famílias do bairro."
+    },
+    {
+      "id": "terco-homens",
+      "name": "Terço dos Homens",
+      "type": "Movimento Mariano",
+      "schedule": "Encontros semanais de oração na Igreja Matriz",
+      "coordinator": "Coordenação do Terço dos Homens",
+      "description": "Homens de todas as idades reunidos aos pés da Imaculada Conceição para rezar o Santo Terço pelas famílias e pela Igreja."
+    },
+    {
+      "id": "fe-e-luz",
+      "name": "Movimento Fé e Luz",
+      "type": "Movimento de Inclusão e Fraternidade",
+      "schedule": "Encontros mensais de partilha, festa e oração",
+      "coordinator": "Comunidade Fé e Luz da Imaculada",
+      "description": "Comunidade de encontro entre pessoas com deficiência intelectual, suas famílias e amigos, celebrando a alegria e a beleza de cada pessoa."
+    }
+  ],
+  "candles": [
+    {
+      "id": "vela-1",
+      "name": "Maria Aparecida S.",
+      "category": "Ação de Graças",
+      "intention": "Em agradecimento pela saúde da minha família e pela proteção da Imaculada Conceição sobre o nosso lar no bairro São Bernardo.",
+      "createdAt": "Hoje, às 09h15",
+      "isPublic": true
+    },
+    {
+      "id": "vela-2",
+      "name": "José Carlos e Família",
+      "category": "Saúde e Enfermos",
+      "intention": "Peço a intercessão de Nossa Senhora pela recuperação cirúrgica de minha mãe e paz no coração de todos os enfermos da nossa paróquia.",
+      "createdAt": "Hoje, às 08h40",
+      "isPublic": true
+    },
+    {
+      "id": "vela-3",
+      "name": "Ana Beatriz M.",
+      "category": "Família e Juventude",
+      "intention": "Pelos jovens da Crisma e da Pastoral da Juventude, para que perseverem sempre no caminho do Evangelho.",
+      "createdAt": "Ontem, às 19h20",
+      "isPublic": true
+    },
+    {
+      "id": "vela-4",
+      "name": "Antônio Marcos O.",
+      "category": "Intenção Especial",
+      "intention": "Em sufrágio dos falecidos da nossa família e por todos os dizimistas e benfeitores da Paróquia da Imaculada.",
+      "createdAt": "Ontem, às 16h10",
+      "isPublic": true
+    },
+    {
+      "id": "vela-5",
+      "name": "Helena R. (Devota)",
+      "category": "Ação de Graças",
+      "intention": "Obrigada, Mãe Imaculada, pela graça alcançada no trabalho do meu filho.",
+      "createdAt": "Ontem, às 12h30",
+      "isPublic": true
+    }
+  ],
+  "historyChapters": [
+    {
+      "id": "hist-1",
+      "era": "As Origens e a Devoção no Bairro São Bernardo",
+      "period": "Primeiras Décadas",
+      "title": "O Nascimento de uma Comunidade sob o Manto da Imaculada",
+      "summary": "A história da nossa paróquia nasce da fé viva das primeiras famílias moradoras do bairro São Bernardo, em Campinas, que se reuniam em oração e mutirão para erguer a casa da Mãe de Deus na Praça Professor Paulo José Otaviano.",
+      "imageUrl": "/images/fachada-imaculada-historia.jpg",
+      "note": "Registro histórico da fachada da Paróquia da Imaculada na Praça Prof. Paulo José Otaviano."
+    },
+    {
+      "id": "hist-2",
+      "era": "Devoção e Arte Sacra na Matriz",
+      "period": "Consolidação Paroquial",
+      "title": "O Altar de Nossa Senhora da Imaculada Conceição",
+      "summary": "Com o esforço generoso dos paroquianos, quermesses históricas, festas da padroeira e bênçãos memoráveis, a Igreja Matriz ganhou seu retábulo entalhado em madeira acolhendo a imagem coroada da Imaculada Conceição.",
+      "imageUrl": "/images/altar-imaculada-real-hd.jpg",
+      "note": "Retábulo em madeira entalhada com a imagem de Nossa Senhora da Imaculada Conceição na Igreja Matriz."
+    },
+    {
+      "id": "hist-3",
+      "era": "Tradição Viva, Pastorais e Gerações de Fiéis",
+      "period": "Memória Recente aos Dias Atuais",
+      "title": "Uma Família de Fé que Atravessa Gerações",
+      "summary": "Batizados, Primeiras Comunhões, Crismas, Matrimônios e procissões de 8 de dezembro: a Paróquia da Imaculada continua escrevendo sua história diariamente através das suas pastorais, movimentos e do testemunho de cada fiel.",
+      "imageUrl": "/images/fachada-imaculada-real-hd.jpg",
+      "note": "Fachada atual da Paróquia da Imaculada com o painel de azulejos da Padroeira."
+    }
+  ],
+  "pastoralRegistrations": []
+}

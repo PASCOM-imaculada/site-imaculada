@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.env*
+.claude/
+
+# Arquivos internos de trabalho, fora do repositório público
+.agents/
+.impeccable/
+DESIGN.md
+GEMINI.md
+PRODUCT.md

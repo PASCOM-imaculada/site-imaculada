@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+:root {
+  --font-display: "Cinzel", Georgia, serif;
+  --font-script: "Alex Brush", cursive;
+  --font-condensed: "Oswald", sans-serif;
+  --font-body: "Source Sans 3", system-ui, -apple-system, sans-serif;
+  --marian-abyss: #0e2a47;
+  --marian-mantle: #1b4965;
+  --marian-celeste: #2c698d;
+  --limestone-light: #faf8f5;
+  --limestone-warm: #f1ece1;
+  --limestone-border: #d8cebe;
+  --candle-gold: #c89b3c;
+  --candle-gold-deep: #9a701e;
+  --candle-flame: #f4b942;
+  --ink-primary: #0f2236;
+  --ink-secondary: #334e68;
+  --success-sacred: #1f6f50;
+  --danger-sacred: #9e2a2b;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--limestone-light);
+  color: var(--ink-primary);
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  caret-color: var(--candle-gold-deep);
+}
+
+body {
+  background-color: var(--limestone-light);
+  color: var(--ink-primary);
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+/* Themed Browser Surfaces */
+::selection {
+  background-color: var(--marian-mantle);
+  color: var(--limestone-light);
+}
+
+:focus-visible {
+  outline: 3px solid var(--candle-gold);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--limestone-warm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--marian-mantle);
+  border: 2px solid var(--limestone-warm);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--marian-abyss);
+}
+
+/* Epigraphic Display Headings */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+p {
+  max-width: 72ch;
+}
+
+a {
+  text-underline-offset: 0.22em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sacred Candle Flame Animation */
+@keyframes candleFlicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-1deg) translateY(0);
+    opacity: 0.96;
+  }
+  25% {
+    transform: scale(1.04, 0.97) rotate(1.5deg) translateY(-1px);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.97, 1.05) rotate(-0.8deg) translateY(-2px);
+    opacity: 0.92;
+  }
+  75% {
+    transform: scale(1.03, 1.02) rotate(1deg) translateY(-1px);
+    opacity: 0.99;
+  }
+}
+
+@keyframes haloPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.38;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.58;
+  }
+}
+
+.animate-candle-flame {
+  animation: candleFlicker 3.2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-candle-halo {
+  animation: haloPulse 3.6s ease-in-out infinite;
+}
+
+/* Liturgical Arch Frame */
+.sacred-arch-top {
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
+}
+
+/* Acutis-Style Smooth Scroll Reveal (opacity + translate3d + scale + subtle blur) */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 74px, 0) scale(0.985);
+  filter: blur(2.5px);
+  transition:
+    opacity 1.35s cubic-bezier(0.19, 0.8, 0.22, 1),
+    transform 1.35s cubic-bezier(0.19, 0.8, 0.22, 1),
+    filter 1.35s cubic-bezier(0.19, 0.8, 0.22, 1);
+  will-change: opacity, transform, filter;
+}
+
+[data-reveal="left"] {
+  opacity: 0;
+  transform: translate3d(-56px, 48px, 0) scale(0.98);
+  filter: blur(3px);
+}
+
+[data-reveal="scale"] {
+  opacity: 0;
+  transform: translate3d(0, 56px, 0) scale(0.94);
+  filter: blur(3px);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0px);
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 74px, 0) scale(0.985);
+  filter: blur(2.5px);
+  transition:
+    opacity 1.35s cubic-bezier(0.19, 0.8, 0.22, 1),
+    transform 1.35s cubic-bezier(0.19, 0.8, 0.22, 1),
+    filter 1.35s cubic-bezier(0.19, 0.8, 0.22, 1);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0px);
+}

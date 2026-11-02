@@ -824,7 +824,7 @@ export default function AdminPage() {
                   <h2 className="font-display text-2xl font-bold text-[#0E2A47] flex items-center gap-2">
                     <Flame
                       aria-hidden="true"
-                      className="w-6 h-6 text-[#9A701E]"
+                      className="w-6 h-6 text-[#86601A]"
                     />
                     <span>
                       Últimas Intenções no Velário Virtual (
@@ -839,7 +839,7 @@ export default function AdminPage() {
                       >
                         <div className="flex justify-between text-sm font-bold text-[#0E2A47]">
                           <span>{c.name}</span>
-                          <span className="text-xs text-[#9A701E]">
+                          <span className="text-xs text-[#86601A]">
                             {c.category} {!c.isPublic ? "(Reservada ao Altar)" : ""}
                           </span>
                         </div>

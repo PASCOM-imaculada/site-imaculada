@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import Link from "next/link";
+import React, { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useParish } from "@/context/ParishContext";
 
@@ -26,12 +25,22 @@ export default function CalendarioPage() {
   const { data } = useParish();
   const { events } = data;
 
-  const today = new Date();
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  // A data de hoje só é lida no navegador: a página é gerada antes, na publicação
+  const [todayStr, setTodayStr] = useState("");
+  const [currentYear, setCurrentYear] = useState(0);
+  const [currentMonth, setCurrentMonth] = useState(0);
   const [selectedDateFilter, setSelectedDateFilter] = useState<string | null>(
     null
   );
+
+  useEffect(() => {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    setTodayStr(`${now.getFullYear()}-${mm}-${dd}`);
+    setCurrentYear(now.getFullYear());
+    setCurrentMonth(now.getMonth());
+  }, []);
 
   const daysInMonth = useMemo(() => {
     const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
@@ -62,9 +71,12 @@ export default function CalendarioPage() {
   }, [events]);
 
   const filteredEvents = useMemo(() => {
-    if (!selectedDateFilter) return events;
-    return events.filter((evt) => evt.date === selectedDateFilter);
-  }, [events, selectedDateFilter]);
+    const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+    if (selectedDateFilter) {
+      return sorted.filter((evt) => evt.date === selectedDateFilter);
+    }
+    return sorted.filter((evt) => evt.date >= todayStr);
+  }, [events, selectedDateFilter, todayStr]);
 
   function handlePrevMonth() {
     setSelectedDateFilter(null);
@@ -98,13 +110,6 @@ export default function CalendarioPage() {
               Celebrações especiais, festas litúrgicas e encontros.
             </p>
           </div>
-
-          <Link
-            href="/admin"
-            className="text-xs font-semibold text-[#334E68] hover:text-[#0E2A47] transition-colors"
-          >
-            Gerenciar eventos (Secretaria) →
-          </Link>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -115,20 +120,20 @@ export default function CalendarioPage() {
                 type="button"
                 onClick={handlePrevMonth}
                 aria-label="Mês anterior"
-                className="w-9 h-9 rounded-full hover:bg-[#0E2A47]/8 flex items-center justify-center cursor-pointer"
+                className="w-11 h-11 rounded-full hover:bg-[#0E2A47]/8 flex items-center justify-center cursor-pointer"
               >
                 <ChevronLeft aria-hidden="true" className="w-4 h-4" />
               </button>
 
               <h2 className="font-display text-lg font-semibold text-[#0E2A47] tabular-nums">
-                {MONTH_NAMES[currentMonth]} {currentYear}
+                {todayStr && `${MONTH_NAMES[currentMonth]} ${currentYear}`}
               </h2>
 
               <button
                 type="button"
                 onClick={handleNextMonth}
                 aria-label="Próximo mês"
-                className="w-9 h-9 rounded-full hover:bg-[#0E2A47]/8 flex items-center justify-center cursor-pointer"
+                className="w-11 h-11 rounded-full hover:bg-[#0E2A47]/8 flex items-center justify-center cursor-pointer"
               >
                 <ChevronRight aria-hidden="true" className="w-4 h-4" />
               </button>
@@ -144,9 +149,9 @@ export default function CalendarioPage() {
                 </div>
               ))}
 
-              {daysInMonth.map((cell, idx) => {
+              {todayStr && daysInMonth.map((cell, idx) => {
                 if (!cell.day || !cell.dateStr) {
-                  return <div key={`empty-${idx}`} className="h-10" />;
+                  return <div key={`empty-${idx}`} className="h-11" />;
                 }
 
                 const hasEvents = Boolean(eventsByDate[cell.dateStr]?.length);
@@ -159,7 +164,7 @@ export default function CalendarioPage() {
                     onClick={() =>
                       setSelectedDateFilter(isSelected ? null : cell.dateStr)
                     }
-                    className={`h-10 rounded-lg text-sm tabular-nums flex flex-col items-center justify-center cursor-pointer transition-colors ${
+                    className={`h-11 rounded-lg text-sm tabular-nums flex flex-col items-center justify-center cursor-pointer transition-colors ${
                       isSelected
                         ? "bg-[#C89B3C] text-[#0E2A47] font-bold"
                         : hasEvents
@@ -186,12 +191,19 @@ export default function CalendarioPage() {
 
           {/* Lista de Eventos (7 Colunas) */}
           <div className="lg:col-span-7 divide-y divide-[#0E2A47]/12 border-y border-[#0E2A47]/12">
+            {todayStr && filteredEvents.length === 0 && (
+              <p className="py-6 text-sm sm:text-base text-[#334E68]">
+                {selectedDateFilter
+                  ? "Nenhum evento nesta data."
+                  : "Nenhum evento futuro cadastrado."}
+              </p>
+            )}
             {filteredEvents.map((evt) => {
               const [year, month, day] = evt.date.split("-");
               return (
                 <article key={evt.id} className="py-6 space-y-1.5">
                   <div className="flex items-baseline justify-between gap-4 tabular-nums">
-                    <span className="text-xs font-semibold text-[#9A701E]">
+                    <span className="text-xs font-semibold text-[#86601A]">
                       {day}/{month}/{year} · {evt.time}
                     </span>
                     <span className="text-xs text-[#334E68]">
@@ -204,6 +216,7 @@ export default function CalendarioPage() {
                   <p className="text-sm sm:text-base text-[#334E68]">
                     {evt.description}
                   </p>
+                  <p className="text-sm text-[#334E68]/85">{evt.location}</p>
                 </article>
               );
             })}

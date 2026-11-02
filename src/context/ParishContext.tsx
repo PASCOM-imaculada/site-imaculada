@@ -32,6 +32,9 @@ interface ParishContextValue {
 
 const STORAGE_KEY = "paroquia_imaculada_campinas_v2";
 
+// No GitHub Pages não há API: valem sempre os dados publicados no site
+const HAS_API = !process.env.NEXT_PUBLIC_BASE_PATH;
+
 const ParishContext = createContext<ParishContextValue | null>(null);
 
 export function ParishProvider({ children }: { children: React.ReactNode }) {
@@ -43,25 +46,21 @@ export function ParishProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function loadStore() {
       try {
-        const res = await fetch("/api/parish", { cache: "no-store" });
-        if (res.ok) {
-          const serverData = await res.json();
-          setData(serverData);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(serverData));
-          setIsLoaded(true);
-          return;
-        }
-      } catch {
-        // Fallback para localStorage se offline
-      }
-
-      try {
-        const cached = localStorage.getItem(STORAGE_KEY);
-        if (cached) {
-          setData(JSON.parse(cached));
-        }
+        // Apaga cópias antigas, que escondiam as atualizações publicadas
+        localStorage.removeItem(STORAGE_KEY);
       } catch {
         // Ignore storage errors
+      }
+
+      if (HAS_API) {
+        try {
+          const res = await fetch("/api/parish", { cache: "no-store" });
+          if (res.ok) {
+            setData(await res.json());
+          }
+        } catch {
+          // Mantém os dados publicados
+        }
       }
       setIsLoaded(true);
     }
@@ -71,11 +70,7 @@ export function ParishProvider({ children }: { children: React.ReactNode }) {
 
   async function persist(nextData: ParishStoreData) {
     setData(nextData);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
-    } catch {
-      // Ignore localStorage quota errors
-    }
+    if (!HAS_API) return;
     try {
       await fetch("/api/parish", {
         method: "POST",

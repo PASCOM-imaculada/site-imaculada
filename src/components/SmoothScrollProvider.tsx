@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 export function SmoothScrollProvider({
@@ -18,8 +19,11 @@ export function SmoothScrollProvider({
   const pathname = usePathname();
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.05,
+      anchors: true,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
@@ -65,15 +69,13 @@ export function SmoothScrollProvider({
         for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-          } else if (entry.boundingClientRect.top > window.innerHeight * 0.88) {
-            // Se o usuário voltar para cima, esconde novamente para surgir de novo ao descer
-            entry.target.classList.remove("is-visible");
+            observer.unobserve(entry.target);
           }
         }
       },
       {
-        threshold: 0.12,
-        rootMargin: isMobile ? "0px 0px -16% 0px" : "0px 0px -10% 0px",
+        threshold: 0.08,
+        rootMargin: isMobile ? "0px 0px -8% 0px" : "0px 0px -10% 0px",
       }
     );
 

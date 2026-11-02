@@ -8,7 +8,6 @@ import {
   ArrowDown,
   ArrowUpRight,
   Check,
-  Clock,
   Copy,
   Flame,
   MapPin,
@@ -24,95 +23,69 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Posição (em pixels da foto original) das estrelas da auréola
+const HALO_STARS = [
+  [690, 22], [745, 32], [790, 60], [822, 100], [838, 152], [830, 205], [802, 250],
+  [582, 253], [552, 210], [544, 157], [560, 107], [592, 65], [635, 35],
+];
+
+// "Sábado – 08h às 12h" vira ["Sábado", "08h às 12h"]
+function splitHours(text: string) {
+  const idx = text.indexOf(" – ");
+  return [text.slice(0, idx), text.slice(idx + 3)];
+}
+
 export default function HomePage() {
   const { data } = useParish();
-  const { parishInfo, massSchedules, candles, pastorals, events } = data;
+  const { parishInfo, massSchedules } = data;
   const [copiedPix, setCopiedPix] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const heroPinRef = useRef<HTMLDivElement>(null);
-  const heroImgRef = useRef<HTMLImageElement>(null);
-  const heroCloudsRef = useRef<HTMLDivElement>(null);
+  const heroFigureRef = useRef<HTMLDivElement>(null);
   const heroTitleGroupRef = useRef<HTMLDivElement>(null);
-  const heroPrayerGroupRef = useRef<HTMLDivElement>(null);
 
   const scheduleSectionRef = useRef<HTMLDivElement>(null);
   const lastSupperBgRef = useRef<HTMLImageElement>(null);
 
   const candlePinRef = useRef<HTMLDivElement>(null);
-  const candleRowRef = useRef<HTMLDivElement>(null);
   const candleGlowRef = useRef<HTMLDivElement>(null);
-  const candleTextRef = useRef<HTMLDivElement>(null);
 
   const parocoSectionRef = useRef<HTMLElement>(null);
   const parocoBgRef = useRef<HTMLImageElement>(null);
-  const parocoCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // 1. ATO I — PRIMEIRA TELA 100% TELA CHEIA COM A IMAGEM REAL DA IMACULADA
-      if (
-        heroPinRef.current &&
-        heroImgRef.current &&
-        heroCloudsRef.current &&
-        heroTitleGroupRef.current &&
-        heroPrayerGroupRef.current
-      ) {
-        const heroTl = gsap.timeline({
+    const mm = gsap.matchMedia(rootRef);
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // 1. ABERTURA — a imagem desce mais devagar que a página e o título se despede
+      if (heroPinRef.current && heroFigureRef.current) {
+        gsap.to(heroFigureRef.current, {
+          yPercent: 12,
+          ease: "none",
           scrollTrigger: {
             trigger: heroPinRef.current,
             start: "top top",
-            end: "+=115%",
-            pin: true,
-            scrub: 0.6,
+            end: "bottom top",
+            scrub: true,
           },
         });
-
-        heroTl
-          .fromTo(
-            heroImgRef.current,
-            { scale: 1, yPercent: 0, transformOrigin: "center top" },
-            {
-              scale: 1.06,
-              yPercent: 0,
-              transformOrigin: "center top",
-              duration: 1,
-              ease: "none",
-            },
-            0
-          )
-          .fromTo(
-            heroCloudsRef.current,
-            { scaleY: 1, opacity: 0.96, transformOrigin: "bottom center" },
-            {
-              scaleY: 1.18,
-              opacity: 1,
-              transformOrigin: "bottom center",
-              duration: 1,
-              ease: "none",
-            },
-            0
-          )
-          .to(
-            heroTitleGroupRef.current,
-            {
-              y: -48,
-              opacity: 0,
-              scale: 0.96,
-              duration: 0.48,
-              ease: "power2.in",
-            },
-            0.06
-          )
-          .fromTo(
-            heroPrayerGroupRef.current,
-            { y: 36, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
-            0.5
-          );
+      }
+      if (heroPinRef.current && heroTitleGroupRef.current) {
+        gsap.to(heroTitleGroupRef.current, {
+          y: -60,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroPinRef.current,
+            start: "top top",
+            end: "55% top",
+            scrub: true,
+          },
+        });
       }
 
-      // 2. ATO II — DESENHO DE JESUS NA ÚLTIMA CEIA (Parallax contínuo no Scroll)
+      // 2. DESENHO DA ÚLTIMA CEIA (Parallax contínuo no Scroll)
       if (scheduleSectionRef.current && lastSupperBgRef.current) {
         gsap.fromTo(
           lastSupperBgRef.current,
@@ -125,13 +98,13 @@ export default function HomePage() {
               trigger: scheduleSectionRef.current,
               start: "top bottom",
               end: "bottom top",
-              scrub: 0.8,
+              scrub: true,
             },
           }
         );
       }
 
-      // 3. ATO III — CAPELA DAS VELAS (7 Velas que Acendem Sincronizadas no Scroll)
+      // 3. CAPELA DAS VELAS — acendem enquanto a seção chega, sem travar a rolagem
       if (candlePinRef.current) {
         const flames = gsap.utils.toArray<HTMLElement>(".gsap-candle-flame");
         const halos = gsap.utils.toArray<HTMLElement>(".gsap-candle-halo");
@@ -139,37 +112,27 @@ export default function HomePage() {
         const candleTl = gsap.timeline({
           scrollTrigger: {
             trigger: candlePinRef.current,
-            start: "top top",
-            end: "+=145%",
-            pin: true,
-            scrub: 0.6,
+            start: "top 75%",
+            end: "top 10%",
+            scrub: true,
           },
         });
 
         const ignitionOrder = [3, 2, 4, 1, 5, 0, 6];
 
         ignitionOrder.forEach((candleIdx, step) => {
-          const flame = flames[candleIdx];
-          const halo = halos[candleIdx];
           const startTime = step * 0.09;
-
-          if (flame) {
+          if (flames[candleIdx]) {
             candleTl.fromTo(
-              flame,
+              flames[candleIdx],
               { opacity: 0, scale: 0.1, y: 12 },
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.25,
-                ease: "back.out(2)",
-              },
+              { opacity: 1, scale: 1, y: 0, duration: 0.25, ease: "back.out(2)" },
               startTime
             );
           }
-          if (halo) {
+          if (halos[candleIdx]) {
             candleTl.fromTo(
-              halo,
+              halos[candleIdx],
               { opacity: 0, scale: 0.2 },
               { opacity: 0.65, scale: 1.25, duration: 0.3, ease: "power2.out" },
               startTime
@@ -185,35 +148,9 @@ export default function HomePage() {
             0
           );
         }
-
-        if (candleTextRef.current) {
-          candleTl.fromTo(
-            candleTextRef.current,
-            { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-            0.25
-          );
-        }
       }
 
-      // 4. ATO IV — CARTÕES EMPILHADOS DA VIDA PAROQUIAL (Profundidade no Scroll sem transparência)
-      const stackCards = gsap.utils.toArray<HTMLElement>(".gsap-stack-card");
-      stackCards.forEach((card, i) => {
-        if (i < stackCards.length - 1) {
-          gsap.to(card, {
-            scale: 0.96,
-            ease: "none",
-            scrollTrigger: {
-              trigger: stackCards[i + 1],
-              start: "top 85%",
-              end: "top 22%",
-              scrub: true,
-            },
-          });
-        }
-      });
-
-      // 5. SEÇÃO DO PÁROCO — PARALLAX DOS ANJOS (ESTILO CAPELA SISTINA) E ELEVAÇÃO DO RETRATO NO SCROLL
+      // 4. SEÇÃO DO PÁROCO — parallax dos anjos
       if (parocoSectionRef.current && parocoBgRef.current) {
         gsap.fromTo(
           parocoBgRef.current,
@@ -226,31 +163,36 @@ export default function HomePage() {
               trigger: parocoSectionRef.current,
               start: "top bottom",
               end: "bottom top",
-              scrub: 0.8,
+              scrub: true,
             },
           }
         );
       }
+    });
 
-      if (parocoSectionRef.current && parocoCardRef.current) {
-        gsap.fromTo(
-          parocoCardRef.current,
-          { y: 28 },
-          {
-            y: -16,
-            ease: "none",
-            scrollTrigger: {
-              trigger: parocoSectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.7,
-            },
+    // 5. CARTÕES EMPILHADOS — só onde eles cabem inteiros na tela
+    mm.add(
+      "(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 640px)",
+      () => {
+        const stackCards = gsap.utils.toArray<HTMLElement>(".gsap-stack-card");
+        stackCards.forEach((card, i) => {
+          if (i < stackCards.length - 1) {
+            gsap.to(card, {
+              scale: 0.96,
+              ease: "none",
+              scrollTrigger: {
+                trigger: stackCards[i + 1],
+                start: "top 85%",
+                end: "top 22%",
+                scrub: true,
+              },
+            });
           }
-        );
+        });
       }
-    }, rootRef);
+    );
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   async function handleCopyPix() {
@@ -284,71 +226,100 @@ export default function HomePage() {
       <section
         ref={heroPinRef}
         aria-label="Paróquia da Imaculada"
-        className="relative h-dvh w-full overflow-hidden flex items-end justify-center bg-[#735D47]"
+        className="relative h-dvh w-full overflow-hidden flex items-end justify-center bg-[#FAF8F5]"
       >
-        {/* Foto Original da Escultura de Nossa Senhora da Imaculada Conceição */}
-        <img
-          ref={heroImgRef}
-          src={asset("/images/imaculada-statue-hero-original.jpg")}
-          alt="Imagem de Nossa Senhora da Imaculada Conceição de braços abertos com auréola de doze estrelas"
-          width={1920}
-          height={1080}
-          className="absolute inset-x-0 top-11 w-full h-[calc(100%-2.75rem)] object-cover object-top will-change-transform select-none"
-        />
+        <div aria-hidden="true" className="hero-wall absolute inset-0" />
 
-        {/* Faixa Superior Suave da Mesma Cor do Fundo da Imagem para Não Conflitar com a Barra do Topo */}
+        {/* Faixa atrás da barra do topo, na mesma cor da parede da imagem */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#5E4B38] via-[#735D47]/90 to-transparent"
+          className="hero-strip absolute inset-x-0 top-0 h-28 bg-[#5E4B38]"
         />
 
-        {/* Camada de Nuvens e Ligação Branca Contínua na Base (Sem Corte com a Seção Abaixo) */}
+        {/* A imagem é dimensionada para manter a auréola e as mãos sempre visíveis */}
+        <div className="absolute inset-x-0 top-12 flex justify-center pointer-events-none">
+          <div
+            ref={heroFigureRef}
+            className="hero-figure relative shrink-0 will-change-transform"
+          >
+            <img
+              src={asset("/images/imaculada-statue-hero-original.jpg")}
+              alt="Imagem de Nossa Senhora da Imaculada Conceição de braços abertos com auréola de doze estrelas"
+              width={1376}
+              height={768}
+              fetchPriority="high"
+              className="hero-image block w-full h-auto select-none"
+            />
+            <div aria-hidden="true" className="hero-vignette absolute inset-0" />
+            <div aria-hidden="true" className="hero-glow absolute" />
+            {HALO_STARS.map(([x, y], idx) => (
+              <span
+                key={idx}
+                aria-hidden="true"
+                className="hero-star absolute"
+                style={{
+                  left: `${(x / 1376) * 100}%`,
+                  top: `${(y / 768) * 100}%`,
+                  animationDelay: `${idx * 0.55}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Nuvens em movimento lento e passagem contínua para a seção seguinte */}
+        <div aria-hidden="true" className="hero-cloud hero-cloud-back absolute" />
         <div
-          ref={heroCloudsRef}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 -bottom-1 h-[48dvh] bg-gradient-to-t from-[#FAF8F5] from-24% via-[#FAF8F5]/92 via-56% to-transparent will-change-transform"
+          className="pointer-events-none absolute inset-x-0 -bottom-1 h-[30dvh] bg-gradient-to-t from-[#FAF8F5] from-20% via-[#FAF8F5]/85 via-55% to-transparent"
         />
+        <div aria-hidden="true" className="hero-cloud hero-cloud-front absolute" />
 
-        {/* Escrito Principal Fiel ao Exemplo ("PARÓQUIA DA" + Cursivo "Imaculada") */}
         <div
           ref={heroTitleGroupRef}
-          className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-10 sm:pb-12 text-center flex flex-col items-center select-none"
+          className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-[max(1.25rem,3dvh)] text-center flex flex-col items-center"
         >
           <h1 className="flex flex-col items-center">
             <span
               style={{ fontFamily: "var(--font-condensed)" }}
-              className="text-2xl sm:text-4xl md:text-[2.65rem] font-normal tracking-[0.28em] text-[#1C2730] uppercase pl-[0.28em]"
+              className="hero-eyebrow font-normal tracking-[0.28em] text-[#1C2730] uppercase pl-[0.28em]"
             >
               PARÓQUIA DA
             </span>
             <span
               style={{ fontFamily: "var(--font-script)" }}
-              className="text-[4.75rem] sm:text-[7.2rem] md:text-[9rem] lg:text-[10.2rem] leading-[0.82] text-[#613B20] -mt-1 sm:-mt-2 drop-shadow-[0_4px_18px_rgba(255,255,255,0.85)]"
+              className="hero-script leading-[1.02] text-[#613B20] px-4 -mt-1"
             >
               Imaculada
             </span>
           </h1>
 
-          <a
-            href="#horarios"
-            aria-label="Rolar para ver os horários"
-            className="mt-4 inline-flex items-center gap-1.5 text-xs tracking-[0.22em] uppercase text-[#334E68]/90 hover:text-[#0E2A47] transition-colors font-medium"
-          >
-            <span>Campinas · São Paulo</span>
-            <ArrowDown aria-hidden="true" className="w-3.5 h-3.5" />
-          </a>
+          <div className="hero-actions mt-2 sm:mt-3 flex flex-col items-center gap-2.5">
+            <a
+              href="#horarios"
+              className="inline-flex min-h-11 items-center gap-2 px-6 py-2.5 rounded-full bg-[#0E2A47] hover:bg-[#1B4965] text-[#FAF8F5] font-semibold text-sm transition-colors"
+            >
+              <span>Ver horários das missas</span>
+              <ArrowDown aria-hidden="true" className="w-4 h-4" />
+            </a>
+            <span className="hero-location text-xs tracking-[0.22em] uppercase text-[#334E68] font-medium">
+              Campinas · São Paulo
+            </span>
+          </div>
         </div>
+      </section>
 
-        {/* Estado 2 do Scroll na Primeira Tela: Jaculatória antes de descer para os Horários */}
-        <div
-          ref={heroPrayerGroupRef}
-          style={{ opacity: 0 }}
-          className="pointer-events-none absolute inset-x-0 bottom-14 sm:bottom-20 z-20 px-6 text-center flex flex-col items-center"
+      {/* Jaculatória: pausa de oração entre a abertura e os horários */}
+      <section
+        aria-label="Jaculatória"
+        className="bg-[#FAF8F5] px-6 pt-10 pb-6 sm:pt-16 sm:pb-8 text-center"
+      >
+        <p
+          data-reveal=""
+          className="mx-auto font-display text-xl sm:text-3xl font-semibold text-[#0E2A47] max-w-3xl leading-snug"
         >
-          <p className="font-display text-2xl sm:text-4xl font-semibold text-[#0E2A47] max-w-3xl leading-snug drop-shadow-[0_2px_14px_rgba(255,255,255,0.95)]">
-            “Ó Maria concebida sem pecado, rogai por nós que recorremos a Vós.”
-          </p>
-        </div>
+          “Ó Maria concebida sem pecado, rogai por nós que recorremos a Vós.”
+        </p>
       </section>
 
       {/* =======================================================================
@@ -363,7 +334,6 @@ export default function HomePage() {
       >
         {/* Fundo Fixo com Desenho de Jesus na Última Ceia (Pão e Vinho) */}
         <div
-          data-reveal="left"
           aria-hidden="true"
           className="sticky top-0 h-dvh w-full overflow-hidden pointer-events-none -mb-[100dvh]"
         >
@@ -402,7 +372,7 @@ export default function HomePage() {
                 <article
                   key={item.id}
                   data-reveal=""
-                  className="p-6 sm:p-8 rounded-2xl bg-[#FAF8F5]/94 backdrop-blur-md border border-[#C89B3C]/35 shadow-[0_14px_34px_rgba(14,42,71,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="p-6 sm:p-8 rounded-2xl bg-[#FAF8F5]/95 border border-[#C89B3C]/35 shadow-[0_14px_34px_rgba(14,42,71,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
                     <h3 className="font-display text-2xl sm:text-[1.75rem] font-semibold text-[#0E2A47]">
@@ -439,14 +409,20 @@ export default function HomePage() {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base text-[#0F2236] tabular-nums">
                 <div className="p-4 rounded-xl bg-[#F3EFE6]/90 border border-[#0E2A47]/10">
-                  <p className="font-semibold text-[#0E2A47]">Terça a Sexta</p>
+                  <p className="font-semibold text-[#0E2A47]">
+                    {splitHours(parishInfo.churchOpenHours.weekdays)[0]}
+                  </p>
                   <p className="mt-1 text-[#334E68]">
-                    08h às 12:15h – 13:15h às 17h
+                    {splitHours(parishInfo.churchOpenHours.weekdays)[1]}
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-[#F3EFE6]/90 border border-[#0E2A47]/10">
-                  <p className="font-semibold text-[#0E2A47]">Sábado</p>
-                  <p className="mt-1 text-[#334E68]">08h às 12h</p>
+                  <p className="font-semibold text-[#0E2A47]">
+                    {splitHours(parishInfo.churchOpenHours.saturday)[0]}
+                  </p>
+                  <p className="mt-1 text-[#334E68]">
+                    {splitHours(parishInfo.churchOpenHours.saturday)[1]}
+                  </p>
                 </div>
               </div>
             </article>
@@ -484,7 +460,7 @@ export default function HomePage() {
       <section
         ref={candlePinRef}
         aria-label="Capela das Velas Interativa"
-        className="relative h-dvh w-full overflow-hidden bg-[#0E2A47] text-[#FAF8F5] flex flex-col items-center justify-center px-4 sm:px-6"
+        className="relative min-h-dvh w-full overflow-hidden bg-[#0E2A47] text-[#FAF8F5] flex flex-col items-center justify-center px-4 sm:px-6 py-20"
       >
         <CandleEmbersCanvas />
 
@@ -495,8 +471,6 @@ export default function HomePage() {
         />
 
         <div
-          ref={candleRowRef}
-          data-reveal="scale"
           aria-hidden="true"
           className="relative z-10 flex items-end justify-center gap-3 sm:gap-6 md:gap-8 mb-12"
         >
@@ -516,7 +490,6 @@ export default function HomePage() {
         </div>
 
         <div
-          ref={candleTextRef}
           className="relative z-10 max-w-2xl mx-auto text-center space-y-5"
         >
           <h2 className="font-display text-3xl sm:text-5xl font-semibold text-[#FAF8F5]">
@@ -604,15 +577,15 @@ export default function HomePage() {
                     top: `${80 + idx * 22}px`,
                     zIndex: 10 + idx,
                   }}
-                  className="gsap-stack-card sticky"
+                  className="gsap-stack-card stack-card"
                 >
                   <article
                     style={{
                       backgroundColor: isDark ? "#0E2A47" : "#F3EFE6",
                     }}
-                    className={`rounded-3xl border overflow-hidden shadow-[0_24px_60px_rgba(14,42,71,0.18)] grid grid-cols-1 lg:grid-cols-12 min-h-[24rem] ${card.theme}`}
+                    className={`rounded-3xl border overflow-hidden shadow-[0_24px_60px_rgba(14,42,71,0.18)] grid grid-cols-1 md:grid-cols-12 md:min-h-[22rem] ${card.theme}`}
                   >
-                    <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-between gap-8">
+                    <div className="md:col-span-7 p-7 sm:p-10 lg:p-12 flex flex-col justify-between gap-8">
                       <div className="space-y-4">
                         <h3 className="font-display text-2xl sm:text-4xl font-semibold leading-tight">
                           {card.title}
@@ -644,14 +617,14 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    <div className="lg:col-span-5 relative min-h-64 lg:min-h-full overflow-hidden">
+                    <div className="md:col-span-5 relative h-56 sm:h-64 md:h-auto overflow-hidden">
                       <img
                         src={asset(card.image)}
                         alt={card.imageAlt}
                         width={700}
                         height={560}
                         loading="lazy"
-                        className={`w-full h-full ${card.imageClass}`}
+                        className={`absolute inset-0 w-full h-full ${card.imageClass}`}
                       />
                     </div>
                   </article>
@@ -673,7 +646,6 @@ export default function HomePage() {
       >
         {/* Fundo Ilustrado com Anjos Estilo Capela Sistina */}
         <div
-          data-reveal="scale"
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 overflow-hidden"
         >
@@ -692,7 +664,6 @@ export default function HomePage() {
         </div>
 
         <div
-          ref={parocoCardRef}
           className="relative z-10 max-w-xl mx-auto flex flex-col items-center text-center gap-6 will-change-transform"
         >
           <h2
@@ -731,8 +702,9 @@ export default function HomePage() {
           ATO V — DOAÇÃO VIA PIX, VISITE A PARÓQUIA E NOSSOS MEIOS DE COMUNICAÇÃO
          ======================================================================= */}
       <section className="py-24 sm:py-32 px-4 sm:px-6 bg-[#F3EFE6] border-t border-[#0E2A47]/12">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-          {/* Card 1: Doação via PIX */}
+        <div className={`max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 ${parishInfo.pixKey ? "lg:grid-cols-3" : ""} gap-8 items-stretch`}>
+          {/* Card 1: Doação via PIX (aparece quando a chave real for cadastrada) */}
+          {parishInfo.pixKey && (
           <div
             data-reveal=""
             className="p-7 sm:p-9 rounded-3xl bg-[#0E2A47] text-[#FAF8F5] border border-[#C89B3C]/50 flex flex-col justify-between gap-6 shadow-[0_18px_45px_rgba(14,42,71,0.16)]"
@@ -778,6 +750,7 @@ export default function HomePage() {
               )}
             </button>
           </div>
+          )}
 
           {/* Card 2: Visite a Paróquia */}
           <div
@@ -786,7 +759,7 @@ export default function HomePage() {
             className="p-7 sm:p-9 rounded-3xl bg-[#FAF8F5] border border-[#0E2A47]/12 flex flex-col justify-between gap-6 shadow-[0_14px_34px_rgba(14,42,71,0.06)]"
           >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 text-[#9A701E] text-sm font-semibold">
+              <div className="inline-flex items-center gap-2 text-[#86601A] text-sm font-semibold">
                 <MapPin aria-hidden="true" className="w-4 h-4" />
                 <span>Bairro São Bernardo · Campinas - SP</span>
               </div>
@@ -823,10 +796,10 @@ export default function HomePage() {
           <div
             data-reveal=""
             data-reveal-delay="200"
-            className="md:col-span-2 lg:col-span-1 p-7 sm:p-9 rounded-3xl bg-[#FAF8F5] border border-[#0E2A47]/12 flex flex-col justify-between gap-6 shadow-[0_14px_34px_rgba(14,42,71,0.06)]"
+            className={`${parishInfo.pixKey ? "md:col-span-2 lg:col-span-1" : ""} p-7 sm:p-9 rounded-3xl bg-[#FAF8F5] border border-[#0E2A47]/12 flex flex-col justify-between gap-6 shadow-[0_14px_34px_rgba(14,42,71,0.06)]`}
           >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 text-[#9A701E] text-sm font-semibold">
+              <div className="inline-flex items-center gap-2 text-[#86601A] text-sm font-semibold">
                 <Phone aria-hidden="true" className="w-4 h-4" />
                 <span>Canais de Atendimento</span>
               </div>
@@ -838,7 +811,7 @@ export default function HomePage() {
               <div className="space-y-2.5 pt-1">
                 {/* 1. Telefone Fixo */}
                 <a
-                  href="tel:1932721251"
+                  href={`tel:${(parishInfo.phone ?? "").replace(/\D/g, "")}`}
                   className="p-3 sm:p-3.5 rounded-2xl bg-[#F3EFE6] hover:bg-[#eae3d5] border border-[#0E2A47]/10 flex items-center justify-between text-[#0E2A47] transition-all group shadow-2xs hover:shadow-xs"
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -850,7 +823,7 @@ export default function HomePage() {
                         Telefone Fixo
                       </span>
                       <span className="font-semibold text-sm sm:text-base tabular-nums text-[#0E2A47] block truncate">
-                        (19) 3272-1251
+                        {parishInfo.phone}
                       </span>
                     </div>
                   </div>
@@ -873,7 +846,7 @@ export default function HomePage() {
                         WhatsApp Oficial
                       </span>
                       <span className="font-semibold text-sm sm:text-base tabular-nums text-[#0E2A47] block truncate">
-                        (19) 99591-6572
+                        {parishInfo.whatsapp}
                       </span>
                     </div>
                   </div>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pascom-imaculada.github.io/site-imaculada/sitemap.xml

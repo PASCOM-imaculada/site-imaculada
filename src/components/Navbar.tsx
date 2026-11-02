@@ -58,7 +58,7 @@ export function Navbar() {
         <div className="max-w-6xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-6">
           <Link
             href="/"
-            className={`inline-flex items-center gap-2.5 font-display text-base sm:text-lg font-semibold tracking-tight py-1.5 transition-colors ${
+            className={`inline-flex items-center gap-2 sm:gap-2.5 font-display text-[clamp(0.72rem,3.9vw,1.0625rem)] whitespace-nowrap font-semibold tracking-tight py-1.5 transition-colors ${
               useTransparentHeroBar
                 ? "text-[#FAF8F5] drop-shadow-xs"
                 : "text-[#0E2A47]"
@@ -69,14 +69,14 @@ export function Navbar() {
               alt="Brasão da Paróquia da Imaculada"
               width={32}
               height={32}
-              className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0"
             />
             <span>Paróquia da Imaculada</span>
           </Link>
 
           <nav
             aria-label="Navegação principal"
-            className="hidden md:flex items-center gap-6"
+            className="hidden lg:flex items-center gap-6"
           >
             {NAV_ITEMS.map((item) => {
               const isActive =
@@ -125,7 +125,7 @@ export function Navbar() {
               aria-expanded={mobileMenuOpen}
               aria-controls="menu-mobile-minimal"
               aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-              className={`md:hidden w-10 h-10 flex items-center justify-center cursor-pointer ${
+              className={`lg:hidden w-11 h-11 -mr-2 flex items-center justify-center cursor-pointer ${
                 useTransparentHeroBar ? "text-[#FAF8F5]" : "text-[#0E2A47]"
               }`}
             >
@@ -142,7 +142,7 @@ export function Navbar() {
           <nav
             id="menu-mobile-minimal"
             aria-label="Menu móvel"
-            className="md:hidden bg-[#FAF8F5] text-[#0E2A47] border-b border-[#0E2A47]/10 px-6 py-5 space-y-3"
+            className="lg:hidden bg-[#FAF8F5] text-[#0E2A47] border-b border-[#0E2A47]/10 px-6 py-5 space-y-3"
           >
             {NAV_ITEMS.map((item) => {
               const isActive =
@@ -166,7 +166,7 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <div className="pt-3 border-t border-[#0E2A47]/10 flex items-center justify-between text-sm">
+            <div className="pt-3 border-t border-[#0E2A47]/10 text-sm">
               <a
                 href={whatsappUrl}
                 target="_blank"
@@ -175,13 +175,6 @@ export function Navbar() {
               >
                 WhatsApp Secretaria
               </a>
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-[#334E68]"
-              >
-                Secretaria
-              </Link>
             </div>
           </nav>
         )}

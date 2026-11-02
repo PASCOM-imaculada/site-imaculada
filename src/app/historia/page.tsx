@@ -34,7 +34,7 @@ export default function HistoriaPage() {
                 <h2 className="font-display text-2xl font-semibold text-[#0E2A47]">
                   {chapter.title}
                 </h2>
-                <span className="text-xs font-medium text-[#9A701E]">
+                <span className="text-xs font-medium text-[#86601A]">
                   {chapter.period}
                 </span>
               </div>
@@ -75,7 +75,7 @@ export default function HistoriaPage() {
               href={whatsappHistoryUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0E2A47] hover:text-[#9A701E] transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0E2A47] hover:text-[#86601A] transition-colors"
             >
               <span>Enviar fotos pelo WhatsApp</span>
               <ArrowUpRight aria-hidden="true" className="w-4 h-4" />

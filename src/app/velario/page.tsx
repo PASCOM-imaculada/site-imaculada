@@ -13,33 +13,32 @@ const CATEGORIES: VirtualCandle["category"][] = [
 ];
 
 export default function VelarioPage() {
-  const { data, addCandle } = useParish();
-  const { candles } = data;
+  const { data } = useParish();
+  const { candles, parishInfo } = data;
 
   const [name, setName] = useState("");
   const [category, setCategory] =
     useState<VirtualCandle["category"]>("Ação de Graças");
   const [intention, setIntention] = useState("");
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(false);
   const [justLit, setJustLit] = useState(false);
 
   const visibleCandles = candles.filter((c) => c.isPublic);
 
-  async function handleLightCandle(e: React.FormEvent) {
+  function handleLightCandle(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !intention.trim()) return;
 
-    await addCandle({
-      name: name.trim(),
-      category,
-      intention: intention.trim(),
-      isPublic,
-    });
+    const message = `Olá! Paz e Bem. Gostaria de acender uma vela no Velário.\nNome: ${name.trim()}\nIntenção: ${category}\nOração: ${intention.trim()}\nMostrar no mural do site: ${isPublic ? "Sim, autorizo" : "Não"}`;
+    window.open(
+      `https://wa.me/${parishInfo.whatsappNumber}?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
 
     setName("");
     setIntention("");
     setJustLit(true);
-    setTimeout(() => setJustLit(false), 4000);
   }
 
   return (
@@ -63,18 +62,12 @@ export default function VelarioPage() {
         {/* Grade Minimalista de Velas Acesas */}
         <section aria-label="Altar de velas acesas" className="space-y-6">
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-6 py-8 px-4 rounded-2xl bg-[#1B4965]/35 border border-[#C89B3C]/25">
-            {candles.slice(0, 12).map((candle) => (
-              <div
-                key={candle.id}
-                className="flex flex-col items-center text-center gap-2"
-              >
+            {Array.from({ length: 12 }, (_, idx) => (
+              <div key={idx} className="flex flex-col items-center">
                 <div aria-hidden="true" className="flex flex-col items-center">
                   <div className="w-3 h-5 rounded-full bg-gradient-to-t from-[#C89B3C] via-[#F4B942] to-[#FAF8F5] shadow-[0_0_14px_#F4B942] animate-candle-flame" />
                   <div className="w-4 h-9 bg-[#FAF8F5] rounded-t-xs mt-0.5" />
                 </div>
-                <span className="text-xs text-[#F1ECE1]/85 truncate max-w-full">
-                  {candle.name}
-                </span>
               </div>
             ))}
           </div>
@@ -93,7 +86,7 @@ export default function VelarioPage() {
               className="p-4 rounded-xl bg-[#1B4965] border border-[#C89B3C] text-center text-sm font-semibold text-[#F4B942] flex items-center justify-center gap-2"
             >
               <Check aria-hidden="true" className="w-4 h-4" />
-              <span>Sua vela foi acesa na Capela Virtual.</span>
+              <span>Abrimos o WhatsApp com seu pedido. Toque em enviar para entregá-lo à secretaria.</span>
             </div>
           )}
 
@@ -113,7 +106,7 @@ export default function VelarioPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ex.: Maria Aparecida"
-                  className="w-full min-h-11 px-4 py-2.5 rounded-lg bg-[#1B4965]/60 border border-[#FAF8F5]/20 text-[#FAF8F5] placeholder:text-[#F1ECE1]/45 text-sm"
+                  className="w-full min-h-11 px-4 py-2.5 rounded-lg bg-[#1B4965]/60 border border-[#FAF8F5]/20 text-[#FAF8F5] placeholder:text-[#F1ECE1]/60 text-base"
                 />
               </div>
 
@@ -130,7 +123,7 @@ export default function VelarioPage() {
                   onChange={(e) =>
                     setCategory(e.target.value as VirtualCandle["category"])
                   }
-                  className="w-full min-h-11 px-4 py-2.5 rounded-lg bg-[#1B4965]/60 border border-[#FAF8F5]/20 text-[#FAF8F5] text-sm"
+                  className="w-full min-h-11 px-4 py-2.5 rounded-lg bg-[#1B4965]/60 border border-[#FAF8F5]/20 text-[#FAF8F5] text-base"
                 >
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat} className="bg-[#0E2A47]">
@@ -155,7 +148,7 @@ export default function VelarioPage() {
                 value={intention}
                 onChange={(e) => setIntention(e.target.value)}
                 placeholder="Escreva seu pedido ou agradecimento..."
-                className="w-full px-4 py-2.5 rounded-lg bg-[#1B4965]/60 border border-[#FAF8F5]/20 text-[#FAF8F5] placeholder:text-[#F1ECE1]/45 text-sm"
+                className="w-full px-4 py-2.5 rounded-lg bg-[#1B4965]/60 border border-[#FAF8F5]/20 text-[#FAF8F5] placeholder:text-[#F1ECE1]/60 text-base"
               />
             </div>
 
@@ -171,20 +164,26 @@ export default function VelarioPage() {
                 htmlFor="candle-public"
                 className="text-xs text-[#F1ECE1]/80 cursor-pointer"
               >
-                Mostrar minha oração no mural abaixo
+                Autorizo mostrar meu nome e minha oração no mural do site
               </label>
             </div>
+
+            <p className="text-xs text-[#F1ECE1]/80">
+              Seu pedido é enviado pelo WhatsApp à secretaria. O site não guarda
+              seus dados, e nada é publicado sem a sua autorização.
+            </p>
 
             <button
               type="submit"
               className="min-h-12 w-full rounded-full bg-[#C89B3C] hover:bg-[#d8ab4c] text-[#0E2A47] font-semibold text-sm cursor-pointer transition-colors"
             >
-              Acender Vela
+              Enviar pelo WhatsApp
             </button>
           </form>
         </section>
 
-        {/* Mural Limpo de Orações */}
+        {/* Mural de Orações: só com intenções autorizadas e publicadas pela secretaria */}
+        {visibleCandles.length > 0 && (
         <section className="space-y-6 pt-8 border-t border-[#FAF8F5]/12">
           <h2 className="font-display text-xl font-semibold text-[#FAF8F5]">
             Intenções dos Fiéis
@@ -208,6 +207,7 @@ export default function VelarioPage() {
             ))}
           </div>
         </section>
+        )}
       </div>
     </div>
   );

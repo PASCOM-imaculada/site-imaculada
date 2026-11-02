@@ -24,8 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # O GitHub Pages só serve arquivos estáticos, sem rotas de API
-      - run: rm -rf src/app/api
+      # O GitHub Pages só serve arquivos estáticos: sem API, o painel só funciona localmente
+      - run: rm -rf src/app/api src/app/admin
       - run: npm run build
         env:
           GITHUB_PAGES: "true"

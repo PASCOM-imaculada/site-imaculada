@@ -12,7 +12,7 @@
     "instagram": "https://www.instagram.com/paroquiadaimaculadacampinas/",
     "youtube": "https://www.youtube.com/@Par%C3%B3quiadaImaculada",
     "facebook": "https://www.facebook.com/ParoquiadaImaculada/",
-    "pixKey": "secretaria@paroquiadaimaculada.org.br (Chave ilustrativa — atualizar no Painel da Secretaria)",
+    "pixKey": "",
     "pixHolder": "Paróquia Nossa Senhora da Imaculada Conceição — Campinas",
     "pixBank": "Arquidiocese de Campinas / Paróquia da Imaculada",
     "churchOpenHours": {
@@ -27,28 +27,40 @@
       "id": "domingo",
       "day": "Domingo",
       "badge": "Dia do Senhor",
-      "times": ["08h30", "10h30", "18h30"],
+      "times": [
+        "08h30",
+        "10h30",
+        "18h30"
+      ],
       "description": "Santas Missas Dominicais com toda a comunidade paroquial na Igreja Matriz."
     },
     {
       "id": "sabado",
       "day": "Sábado",
       "badge": "Fim de Semana",
-      "times": ["12h15", "17h30"],
+      "times": [
+        "12h15",
+        "17h30"
+      ],
       "description": "Missa votiva ao meio-dia e Missa Vespertina (preceito dominical) às 17h30."
     },
     {
       "id": "quarta",
       "day": "Quarta-feira",
       "badge": "Semanal Fixa",
-      "times": ["12h15"],
+      "times": [
+        "12h15"
+      ],
       "description": "Santa Missa no horário de almoço, acolhendo trabalhadores, moradores e devotos."
     },
     {
       "id": "primeira-sexta",
       "day": "1ª Sexta-feira do Mês",
       "badge": "Devoção Especial",
-      "times": ["12h15", "15h00"],
+      "times": [
+        "12h15",
+        "15h00"
+      ],
       "description": "Santas Missas em honra ao Sagrado Coração de Jesus na primeira sexta-feira de cada mês."
     }
   ],
@@ -204,48 +216,7 @@
       "description": "Comunidade de encontro entre pessoas com deficiência intelectual, suas famílias e amigos, celebrando a alegria e a beleza de cada pessoa."
     }
   ],
-  "candles": [
-    {
-      "id": "vela-1",
-      "name": "Maria Aparecida S.",
-      "category": "Ação de Graças",
-      "intention": "Em agradecimento pela saúde da minha família e pela proteção da Imaculada Conceição sobre o nosso lar no bairro São Bernardo.",
-      "createdAt": "Hoje, às 09h15",
-      "isPublic": true
-    },
-    {
-      "id": "vela-2",
-      "name": "José Carlos e Família",
-      "category": "Saúde e Enfermos",
-      "intention": "Peço a intercessão de Nossa Senhora pela recuperação cirúrgica de minha mãe e paz no coração de todos os enfermos da nossa paróquia.",
-      "createdAt": "Hoje, às 08h40",
-      "isPublic": true
-    },
-    {
-      "id": "vela-3",
-      "name": "Ana Beatriz M.",
-      "category": "Família e Juventude",
-      "intention": "Pelos jovens da Crisma e da Pastoral da Juventude, para que perseverem sempre no caminho do Evangelho.",
-      "createdAt": "Ontem, às 19h20",
-      "isPublic": true
-    },
-    {
-      "id": "vela-4",
-      "name": "Antônio Marcos O.",
-      "category": "Intenção Especial",
-      "intention": "Em sufrágio dos falecidos da nossa família e por todos os dizimistas e benfeitores da Paróquia da Imaculada.",
-      "createdAt": "Ontem, às 16h10",
-      "isPublic": true
-    },
-    {
-      "id": "vela-5",
-      "name": "Helena R. (Devota)",
-      "category": "Ação de Graças",
-      "intention": "Obrigada, Mãe Imaculada, pela graça alcançada no trabalho do meu filho.",
-      "createdAt": "Ontem, às 12h30",
-      "isPublic": true
-    }
-  ],
+  "candles": [],
   "historyChapters": [
     {
       "id": "hist-1",

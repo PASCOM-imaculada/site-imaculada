@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { useParish } from "@/context/ParishContext";
 import { asset } from "@/lib/asset";
 
@@ -28,7 +27,7 @@ export function Footer() {
               {info.address} · {info.cityState}
             </p>
             <p className="text-xs sm:text-sm text-[#334E68] tabular-nums">
-              Telefone: (19) 3272-1251 · WhatsApp: {info.whatsapp}
+              Telefone: {info.phone} · WhatsApp: {info.whatsapp}
             </p>
             <p className="text-xs text-[#334E68]/70">{info.forania}</p>
           </div>
@@ -59,12 +58,6 @@ export function Footer() {
           >
             Facebook
           </a>
-          <Link
-            href="/admin"
-            className="text-[#334E68]/80 hover:text-[#0E2A47] transition-colors py-1"
-          >
-            Secretaria
-          </Link>
         </div>
       </div>
     </footer>

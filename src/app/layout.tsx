@@ -6,8 +6,21 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { asset } from "@/lib/asset";
 
+const SITE_URL = "https://pascom-imaculada.github.io/site-imaculada/";
+
 export const metadata: Metadata = {
-  title: "Paróquia da Imaculada",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Paróquia da Imaculada · Campinas",
+    template: "%s · Paróquia da Imaculada",
+  },
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "Paróquia da Imaculada",
+    url: SITE_URL,
+    images: [asset("/images/imaculada-statue-hero-original.jpg")],
+  },
   description:
     "Site oficial da Paróquia da Imaculada (Praça Prof. Paulo José Otaviano, 2 - São Bernardo, Campinas - SP). Horários de Missa, Confissão, Igreja Aberta, Sacramentos, Velário Virtual de Intenções, Pastorais, História e Calendário Paroquial.",
   icons: {
@@ -23,8 +36,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Church",
+              name: "Paróquia da Imaculada",
+              url: SITE_URL,
+              telephone: "+55-19-3272-1251",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Praça Professor Paulo José Otaviano, 2",
+                addressLocality: "Campinas",
+                addressRegion: "SP",
+                postalCode: "13030-629",
+                addressCountry: "BR",
+              },
+            }),
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
